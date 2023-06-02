@@ -1,0 +1,48 @@
+{% extends "base.html" %} 
+{% block title %}Upload{% endblock %} 
+{% block content %}
+<br />
+<div class="row">
+    <div class="col">
+      <br />
+      <h2>Uploaded Image:</h2>
+      <br />
+      <img src="static/file.jpg" alt="Uploaded Image" class="img-thumbnail" alt="Responsive image" style="width: 500px; height: 500px;">
+    </div>
+    <div class="col">
+        <br />
+      <h2>Processed Image:</h2>
+      <br />
+      <img src="static/processed_file.jpg" alt="Processed Image" class="img-thumbnail" alt="Responsive image" style="width: 500px; height: 500px;">
+    </div>
+  </div>
+<br />
+<div class="text-center">
+<button type="submit" class="btn btn-primary" id="btn-check" onclick="handleClick()">Check Tumor</button>
+<span id="value-display" style="display: none;"></span>
+</div>
+<script>
+   function handleClick() {
+        // Hide the button
+        var button = document.getElementById('btn-check');
+        button.style.display = 'none';
+        var valueDisplay = document.getElementById('value-display');
+        valueDisplay.style.display = 'inline'
+        // Make an AJAX request to the server-side Python function
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/check', true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                var string_value = response.string_value;
+                // Display the string value at the value display span
+                valueDisplay.textContent = string_value;
+                valueDisplay.style.fontSize = '40px';
+                valueDisplay.style.fontWeight = 'bold';
+                valueDisplay.style.position = 'relative';
+            }
+        };
+        xhr.send();
+    }
+</script>
+{% endblock %}
